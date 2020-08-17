@@ -1,4 +1,4 @@
-const form = document.getElementById('form');
+const songName = document.getElementById('inputSongName');
 const search = document.getElementById('search');
 const result = document.getElementById('result');
 
@@ -16,19 +16,29 @@ async function searchSongs(term){
 }
 //get lyrics 
 async function getLyrics(artist, songTitle){
-    const res = await fetch(`${api}/v1/${artist}/${songTitle}`);
+    try{
+        const res = await fetch(`${api}/v1/${artist}/${songTitle}`);
     const data = await res.json();
 
     const lyrics = data.lyrics.replace(/(\r\n|\r|n)/g,'<br>');
     
-    result.innerHTML = `<h2><strong>${artist}</strong> -${songTitle}</h2>
-    <span>${lyrics}</span>`;
+    result.innerHTML = `
+    <div class="single-lyrics text-center">
+    <button class="btn go-back">&lsaquo;</button>
+    <h2 class="text-success mb-4"><strong>${artist}</strong> -${songTitle}</h2>
+    <span><pre class="lyric text-white">${lyrics}</pre></span>
+    </div>`;
+
+    } catch(err){
+        alert("Sorry..No lyrics found!!");
+    }
 }
-//show song and artist
+
+//display song and artist
 function showData(data){
     let output = '';
 
-    data.data.forEach(song=>{
+    data.data.slice(0, 10).forEach(song=>{
         output +=`
         <div class="single-result row align-items-center my-3 p-3">
         <div class="col-md-9">
@@ -48,7 +58,7 @@ function showData(data){
 }
 
 //event lister
-form.addEventListener('submit', e =>{
+songName.addEventListener('submit', e =>{
     e.preventDefault();
 
     const searchTerm = search.value.trim();
