@@ -2,39 +2,36 @@ const songName = document.getElementById('inputSongName');
 const search = document.getElementById('search');
 const result = document.getElementById('result');
 
-
+//api url
 const api = 'https://api.lyrics.ovh/';
 
-//search by song or artis
-
+//search by song or artist
 async function searchSongs(term){
     const res = await fetch(`${api}/suggest/${term}`);
     const data = await res.json();
-    
-
     showData(data);   
 }
 //get lyrics 
 async function getLyrics(artist, songTitle){
     try{
         const res = await fetch(`${api}/v1/${artist}/${songTitle}`);
-    const data = await res.json();
+        const data = await res.json();
 
-    const lyrics = data.lyrics.replace(/(\r\n|\r|n)/g,'<br>');
-    
-    result.innerHTML = `
-    <div class="single-lyrics text-center">
-    <button class="btn go-back">&lsaquo;</button>
-    <h2 class="text-success mb-4"><strong>${artist}</strong> -${songTitle}</h2>
-    <span><pre class="lyric text-white">${lyrics}</pre></span>
-    </div>`;
+        const lyrics = data.lyrics.replace(/(\r\n|\r|n)/g,'<br>');
+        
+        result.innerHTML = `
+        <div class="single-lyrics text-center">
+        <button class="btn go-back">&lsaquo;</button>
+        <h2 class="text-success mb-4"><strong>${artist}</strong> -${songTitle}</h2>
+        <span><pre class="lyric text-white">${lyrics}</pre></span>
+        </div>`;
 
     } catch(err){
         alert("Sorry..No lyrics found!!");
     }
 }
 
-//display song and artist
+//display song and artist name
 function showData(data){
     let output = '';
 
@@ -56,8 +53,7 @@ function showData(data){
         ${output}
     `;
 }
-
-//event lister
+//search song name eventListerner
 songName.addEventListener('submit', e =>{
     e.preventDefault();
 
